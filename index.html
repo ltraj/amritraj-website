@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Amrit Raj — Personal Tree</title>
+  <title>Personal Tree — Amrit Raj</title>
   <style>
     :root{--bg:#f8fafc;--card:#ffffff;--muted:#6b7280;--accent:#0ea5a4;--line:#e6edf0}
     html,body{height:100%}
@@ -45,7 +45,7 @@
       <div class="avatar">AR</div>
       <div>
         <h1>Amrit Raj</h1>
-        <div class="subtitle">A friendly personal page — not a CV. BSc (Hons) Mathematics (Ramanujan College, DU). Also exploring BS Data Science at IIT Madras — curious about computers & tech.</div>
+        <div class="subtitle">A personal page — not a CV. BSc (Hons) Mathematics (Ramanujan College, DU). Also exploring BS Data Science at IIT Madras — curious about computers & tech.</div>
       </div>
     </header>
 
@@ -53,7 +53,7 @@
       <div style="display:flex;justify-content:space-between;align-items:center">
         <div>
           <strong>Personal Tree</strong>
-          <div class="tiny">Click each branch to expand. You can add new branches or edit content — saved to your browser.</div>
+          <div class="tiny">Click a branch to expand. Use the buttons to add, edit, or remove nodes. Data is saved locally in your browser.</div>
         </div>
         <div class="controls">
           <button class="btn" id="addRoot">+ Add Branch</button>
@@ -65,15 +65,15 @@
         <!-- Tree will be rendered here -->
       </div>
 
-      <div class="tiny" style="margin-top:10px">Tip: Use the "Add Branch" button to add a new topic. Click the gear icon on any branch to edit its title or description.</div>
+      <div class="tiny" style="margin-top:10px">Tip: Use the Add button to create a new top-level topic. Edit content to replace all placeholder symbols (▮, •••).</div>
     </div>
 
     <div class="card">
-      <strong>Quick links</strong>
-      <div style="margin-top:10px" class="muted">Local site editor: changes you make here are stored in your own browser (localStorage). To make changes permanent across devices, copy the HTML file into your GitHub Pages repo (index.html).</div>
+      <strong>Quick notes</strong>
+      <div style="margin-top:10px" class="muted">This version contains only neutral placeholders so you can type your own personal text. To keep your site across devices, copy this file into a GitHub Pages repo (index.html).</div>
     </div>
 
-    <footer>Made with ♥ — edit freely. Want me to deploy this to GitHub Pages for you? Tell me and I will give step-by-step commands.</footer>
+    <footer>Made with care — placeholders only. Ask me to deploy or tweak styles.</footer>
   </div>
 
   <template id="nodeTpl">
@@ -81,7 +81,7 @@
       <div class="branch">
         <div class="toggle" data-action="toggle">▶</div>
         <div style="flex:1">
-          <div><span class="label" data-role="title">Branch</span> <span class="muted" data-role="short"></span></div>
+          <div><span class="label" data-role="title">Branch</span> <span class="muted" data-role="short">•••</span></div>
         </div>
         <div style="display:flex;gap:6px">
           <button class="ghost" data-action="add">+ sub</button>
@@ -89,63 +89,36 @@
           <button class="ghost" data-action="delete">🗑</button>
         </div>
       </div>
-      <div class="content" data-role="content" style="display:none"></div>
+      <div class="content" data-role="content" style="display:none">▮</div>
       <ul data-role="children"></ul>
     </div>
   </template>
 
   <script>
-    // initial data (kept exactly as you wrote)
+    // neutral placeholder data
     const defaultTree = {
       title: 'root',
       children: [
+        { title: 'About Me', short: 'A friendly intro — not a CV', content: 'Hi! I'm <strong>Amrit Raj</strong>. I study BSc (Hons) Mathematics at Ramanujan College (DU) and I'm also exploring BS in Data Science at IIT Madras out of interest in computers & tech. This site is casual — like how I'd introduce myself to someone.', children: [] },
+        { title: 'Education', short: 'What I study', content: 'BSc (Hons) Mathematics — Ramanujan College, DU.<br/>Currently exploring BS in Data Science at IIT Madras and learning programming (diploma-level)', children: [] },
         {
-          title: 'About Me',
-          short: 'A friendly intro — not a CV',
-          content: `Hi! I'm <strong>Amrit Raj</strong>. I study BSc (Hons) Mathematics at Ramanujan College (DU) and I'm also exploring BS in Data Science at IIT Madras out of interest in computers & tech. This site is casual — like how I'd introduce myself to a someone.`,
-          children: []
-        },
-        {
-          title: 'Education',
-          short: 'What I study',
-          content: `BSc (Hons) Mathematics — Ramanujan College, DU.<br/>Currently exploring BS in Data Science at IIT Madras and learning programming (diploma-level ).`,
-          children: []
-        },
-        {
-          title: 'Interests',
-          short: 'What I enjoy — full details',
-          content: `Below are expanded sub-branches describing each interest in depth. Click any sub-branch for details and personal notes.`,
-          children: [
-            {
-              title: 'Mathematics',
-              short: 'Problem solving & core ideas',
-              content: `I genuinely enjoy mathematics — especially when solving deep, core problems. I'm not chasing being a "professional" mathematician — I enjoy math because it fits how my mind likes to think.`,
-              children: []
-            },
-            {
-              title: 'Linux',
-              short: 'Why I prefer Linux',
-              content: `I prefer Linux over Windows because it gives me control and clarity. I like customizing the system, using the terminal, and building lightweight setups. Linux aligns with my interest — I can inspect what's happening under the hood, script tasks, and learn by doing.`,
-              children: []
-            },
+          title: 'Interests', short: 'What I enjoy — full details', content: 'Below are expanded sub-branches describing each interest in depth. Click any sub-branch for details and personal notes.', children: [
+            { title: 'Mathematics', short: 'Problem solving & core ideas', content: 'I genuinely enjoy mathematics — especially when solving deep, core problems. I'm not chasing being a "professional" mathematician — I enjoy math because it fits how my mind likes to think.', children: [] },
+            { title: 'Linux', short: 'Why I prefer Linux', content: 'I prefer Linux over Windows because it gives me control and clarity. I like customizing the system, using the terminal, and building lightweight setups. Linux aligns with my interest in troubleshooting and automation — I can inspect what's happening under the hood, script tasks, and learn by doing.', children: [] },
             {
               title: 'Chess',
               short: 'Late start — intense interest',
-              content: `I only learned chess in mid-2024 and now regret not starting earlier. The game is fascinating because it combines calculation, pattern recognition, and long-term planning. Right now I'm studying openings, tactics, and endgames.`,
+              content: `I learned chess in mid-2024 and now regret not starting earlier. The game is fascinating because it combines calculation, pattern recognition, and long-term planning. Right now I'm studying openings, tactics, and endgames.`,
               children: [
                 {
                   title: 'Why I started late',
                   short: '',
-                  content: `I didn't discover chess earlier because my focus was elsewhere — other hobbies, and life distractions. Once I tried it, I realized how addictive learning it could be. And I'm excited about future progress.`,
+                  content: `I didn't discover chess earlier because my focus was elsewhere — other hobbies, and life distractions. Once I tried it, I realized how addictive learning it could be. I'm excited about future progress.`,
                   children: []
-                },
-               {
-                  
-                 children: []
                 }
-              ]
-            },
-            {
+          ]
+        },
+         {
               title: 'Movies',
               short: 'Why old movies & favorites',
               content: `I enjoy older films (approx 2000–2016) across romance (SRK), action (Hrithik), and comedy (Akshay). These films have strong nostalgia, memorable music, and clear emotional beats that I enjoy. Recently I've watched many of the classics, so I don't have many new titles left to explore in that era — which explains why I'm not watching as many movies now.`,
@@ -175,16 +148,13 @@
         {
           title: 'Personality & Notes',
           short: 'Shy, reflective, selective with photos',
-          content: `I'm naturally shy sometimes. I don't really know why, but I don't enjoy being that way. — that's part of who I am. I don't like average photos. Out of ~4000 photos, fewer than 70 are usable, fewer than 15 are single portraits, and only about 5 I consider good. I prefer either very good (carefully chosen) or intentionally funny photos rather than bland, average ones.`,
-          children: []
-        },
-        ,
-        
+          content: `I’m naturally shy sometimes, and I don’t know why, but I don’t like being shy — that's part of who I am. I reflect on interactions and prefer small circles. I don't like average photos. Out of ~4000 photos, fewer than 70 are usable, fewer than 15 are single portraits, and only about 5 I consider good. I prefer either very good or intentionally funny photos rather than bland, average ones.`,
+          children: [] 
+        }
       ]
     };
 
-    // Load from localStorage or fallback
-    const STORAGE_KEY = 'amritraj_tree_v1';
+    const STORAGE_KEY = 'personal_tree_placeholders_v1';
     let treeData = null;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -211,7 +181,7 @@
       const contentEl = clone.querySelector('[data-role="content"]');
       const childrenEl = clone.querySelector('[data-role="children"]');
 
-      titleEl.innerHTML = data.title || 'Untitled';
+      titleEl.textContent = data.title || '▮';
       shortEl.textContent = data.short ? ` — ${data.short}` : '';
       contentEl.innerHTML = data.content || '<span class="muted">No details yet.</span>';
 
@@ -225,10 +195,10 @@
 
       // add sub-branch
       clone.querySelector('[data-action="add"]').addEventListener('click', () => {
-        const t = prompt('New sub-branch title');
-        if (t) {
+        const t = prompt('New sub-branch title', '▮');
+        if (t !== null) {
           data.children = data.children || [];
-          data.children.push({ title: t, short: '', content: 'Write something here...', children: [] });
+          data.children.push({ title: t || '▮', short: '', content: '▮', children: [] });
           const childNode = buildNode(data.children[data.children.length - 1]);
           childrenEl.appendChild(childNode);
           contentEl.style.display = 'block'; toggle.textContent = '▼'; save();
@@ -239,9 +209,9 @@
       clone.querySelector('[data-action="edit"]').addEventListener('click', () => {
         const newTitle = prompt('Edit title', data.title) || data.title;
         const newShort = prompt('Short note (shown next to title)', data.short || '') || data.short;
-        const newContent = prompt('Content HTML (basic tags ok)', data.content || '') || data.content;
+        const newContent = prompt('Content (HTML allowed)', data.content || '') || data.content;
         data.title = newTitle; data.short = newShort; data.content = newContent;
-        titleEl.innerHTML = data.title; shortEl.textContent = data.short ? ` — ${data.short}` : '';
+        titleEl.textContent = data.title; shortEl.textContent = data.short ? ` — ${data.short}` : '';
         contentEl.innerHTML = data.content;
         save();
       });
@@ -289,9 +259,9 @@
 
     // Add root-level branch
     document.getElementById('addRoot').addEventListener('click', () => {
-      const t = prompt('New branch title');
-      if (t) {
-        const node = { title: t, short: '', content: 'Write something here...', children: [] };
+      const t = prompt('New branch title', '▮');
+      if (t !== null) {
+        const node = { title: t || '▮', short: '', content: '▮', children: [] };
         treeData.children.push(node);
         render();
       }
@@ -299,7 +269,7 @@
 
     // reset
     document.getElementById('resetBtn').addEventListener('click', () => {
-      if (confirm('Restore initial tree and clear your local edits?')) {
+      if (confirm('Restore neutral placeholder tree and clear your local edits?')) {
         treeData = defaultTree; save(); render();
       }
     });

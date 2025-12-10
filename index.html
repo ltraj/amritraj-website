@@ -18,14 +18,14 @@
 
     /* Tree styles */
     .tree{padding:14px}
-    .node{list-style:none;margin:6px 0;padding-left:18px;position:relative}
-    .node:before{content:'';position:absolute;left:0;top:12px;height:calc(100% - 12px);width:12px;border-left:2px dashed var(--line)}
-    .node .branch{display:flex;align-items:center;gap:10px}
+    .node{list-style:none;margin:6px 0;padding-left:22px;position:relative}
+    .node:before{content:'';position:absolute;left:6px;top:14px;height:calc(100% - 14px);width:12px;border-left:2px dashed var(--line)}
+    .node > .branch{display:flex;align-items:center;gap:10px}
     .toggle{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;background:#fff}
     .label{font-weight:600}
     .muted{color:var(--muted);font-size:13px}
 
-    .content{margin:10px 0 12px 36px;padding:12px;border-radius:8px;background:linear-gradient(90deg,#fbfffd, #ffffff);border:1px solid var(--line)}
+    .content{margin:10px 0 12px 36px;padding:12px;border-radius:8px;background:linear-gradient(90deg,#fbfffd,#ffffff);border:1px solid var(--line)}
 
     /* controls/buttons (re-added) */
     .controls{display:flex;gap:8px;margin-top:10px}
@@ -61,9 +61,10 @@
         </div>
       </div>
 
-      <div class="tree card" id="treeRoot" style="margin-top:12px">
+      <!-- use a UL as the root container so nested lists are consistent -->
+      <ul class="tree card" id="treeRoot" style="margin-top:12px; padding:12px 16px;">
         <!-- Tree will be rendered here -->
-      </div>
+      </ul>
 
       <div class="tiny" style="margin-top:10px">Tip: Use the Add button to create a new top-level topic. Edit content to replace all placeholder symbols (▮, •••).</div>
     </div>
@@ -76,22 +77,23 @@
     <footer>Made with care — placeholders only. Ask me to deploy or tweak styles.</footer>
   </div>
 
+  <!-- template uses an LI so children append naturally into ULs -->
   <template id="nodeTpl">
-    <div class="node">
+    <li class="node">
       <div class="branch">
-        <div class="toggle" data-action="toggle">▶</div>
+        <button class="toggle" data-action="toggle" aria-label="toggle">▶</button>
         <div style="flex:1">
-          <div><span class="label" data-role="title">Branch</span> <span class="muted" data-role="short">•••</span></div>
+          <div><span class="label" data-role="title">Branch</span><span class="muted" data-role="short"> •••</span></div>
         </div>
         <div style="display:flex;gap:6px">
-          <button class="ghost" data-action="add">+ sub</button>
-          <button class="ghost" data-action="edit">✎</button>
-          <button class="ghost" data-action="delete">🗑</button>
+          <button class="ghost" data-action="add" aria-label="add-sub">+ sub</button>
+          <button class="ghost" data-action="edit" aria-label="edit">✎</button>
+          <button class="ghost" data-action="delete" aria-label="delete">🗑</button>
         </div>
       </div>
       <div class="content" data-role="content" style="display:none">▮</div>
-      <ul data-role="children"></ul>
-    </div>
+      <ul data-role="children" style="margin-left:12px;padding-left:12px"></ul>
+    </li>
   </template>
 
   <script>
@@ -99,12 +101,12 @@
     const defaultTree = {
       title: 'root',
       children: [
-        { title: 'About Me', short: 'A friendly intro — not a CV', content: 'Hi! I'm <strong>Amrit Raj</strong>. I study BSc (Hons) Mathematics at Ramanujan College (DU) and I'm also exploring BS in Data Science at IIT Madras out of interest in computers & tech. This site is casual — like how I'd introduce myself to someone.', children: [] },
+        { title: 'About Me', short: 'A friendly intro — not a CV', content: 'Hi! I\'m <strong>Amrit Raj</strong>. I study BSc (Hons) Mathematics at Ramanujan College (DU) and I\'m also exploring BS in Data Science at IIT Madras out of interest in computers & tech. This site is casual — like how I\'d introduce myself to someone.', children: [] },
         { title: 'Education', short: 'What I study', content: 'BSc (Hons) Mathematics — Ramanujan College, DU.<br/>Currently exploring BS in Data Science at IIT Madras and learning programming (diploma-level)', children: [] },
         {
           title: 'Interests', short: 'What I enjoy — full details', content: 'Below are expanded sub-branches describing each interest in depth. Click any sub-branch for details and personal notes.', children: [
-            { title: 'Mathematics', short: 'Problem solving & core ideas', content: 'I genuinely enjoy mathematics — especially when solving deep, core problems. I'm not chasing being a "professional" mathematician — I enjoy math because it fits how my mind likes to think.', children: [] },
-            { title: 'Linux', short: 'Why I prefer Linux', content: 'I prefer Linux over Windows because it gives me control and clarity. I like customizing the system, using the terminal, and building lightweight setups. Linux aligns with my interest in troubleshooting and automation — I can inspect what's happening under the hood, script tasks, and learn by doing.', children: [] },
+            { title: 'Mathematics', short: 'Problem solving & core ideas', content: 'I genuinely enjoy mathematics — especially when solving deep, core problems. I\'m not chasing being a "professional" mathematician — I enjoy math because it fits how my mind likes to think.', children: [] },
+            { title: 'Linux', short: 'Why I prefer Linux', content: 'I prefer Linux over Windows because it gives me control and clarity. I like customizing the system, using the terminal, and building lightweight setups. Linux aligns with my interest in troubleshooting and automation — I can inspect what\'s happening under the hood, script tasks, and learn by doing.', children: [] },
             {
               title: 'Chess',
               short: 'Late start — intense interest',
@@ -116,9 +118,9 @@
                   content: `I didn't discover chess earlier because my focus was elsewhere — other hobbies, and life distractions. Once I tried it, I realized how addictive learning it could be. I'm excited about future progress.`,
                   children: []
                 }
-          ]
-        },
-         {
+              ]
+            },
+            {
               title: 'Movies',
               short: 'Why old movies & favorites',
               content: `I enjoy older films (approx 2000–2016) across romance (SRK), action (Hrithik), and comedy (Akshay). These films have strong nostalgia, memorable music, and clear emotional beats that I enjoy. Recently I've watched many of the classics, so I don't have many new titles left to explore in that era — which explains why I'm not watching as many movies now.`,
@@ -149,7 +151,7 @@
           title: 'Personality & Notes',
           short: 'Shy, reflective, selective with photos',
           content: `I’m naturally shy sometimes, and I don’t know why, but I don’t like being shy — that's part of who I am. I reflect on interactions and prefer small circles. I don't like average photos. Out of ~4000 photos, fewer than 70 are usable, fewer than 15 are single portraits, and only about 5 I consider good. I prefer either very good or intentionally funny photos rather than bland, average ones.`,
-          children: [] 
+          children: []
         }
       ]
     };
@@ -158,15 +160,15 @@
     let treeData = null;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      treeData = raw ? JSON.parse(raw) : defaultTree;
-    } catch (e) { treeData = defaultTree; }
+      treeData = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(defaultTree));
+    } catch (e) { treeData = JSON.parse(JSON.stringify(defaultTree)); }
 
     const rootEl = document.getElementById('treeRoot');
     const tpl = document.getElementById('nodeTpl').content;
 
     function render() {
       rootEl.innerHTML = '';
-      treeData.children.forEach(child => {
+      (treeData.children || []).forEach(child => {
         const node = buildNode(child);
         rootEl.appendChild(node);
       });
@@ -174,19 +176,19 @@
     }
 
     function buildNode(data) {
-      const clone = tpl.cloneNode(true);
-      const nodeWrapper = clone.querySelector('.node');
-      const titleEl = clone.querySelector('[data-role="title"]');
-      const shortEl = clone.querySelector('[data-role="short"]');
-      const contentEl = clone.querySelector('[data-role="content"]');
-      const childrenEl = clone.querySelector('[data-role="children"]');
+      const fragment = tpl.cloneNode(true);
+      const nodeEl = fragment.querySelector('.node');
+      const titleEl = nodeEl.querySelector('[data-role="title"]');
+      const shortEl = nodeEl.querySelector('[data-role="short"]');
+      const contentEl = nodeEl.querySelector('[data-role="content"]');
+      const childrenEl = nodeEl.querySelector('[data-role="children"]');
 
-      titleEl.textContent = data.title || '▮';
+      titleEl.textContent = data.title || '';
       shortEl.textContent = data.short ? ` — ${data.short}` : '';
       contentEl.innerHTML = data.content || '<span class="muted">No details yet.</span>';
 
       // toggle
-      const toggle = clone.querySelector('[data-action="toggle"]');
+      const toggle = nodeEl.querySelector('[data-action="toggle"]');
       toggle.addEventListener('click', () => {
         const open = contentEl.style.display === 'block';
         contentEl.style.display = open ? 'none' : 'block';
@@ -194,53 +196,48 @@
       });
 
       // add sub-branch
-      clone.querySelector('[data-action="add"]').addEventListener('click', () => {
-        const t = prompt('New sub-branch title', '▮');
+      nodeEl.querySelector('[data-action="add"]').addEventListener('click', () => {
+        const t = prompt('New sub-branch title', '');
         if (t !== null) {
           data.children = data.children || [];
-          data.children.push({ title: t || '▮', short: '', content: '▮', children: [] });
-          const childNode = buildNode(data.children[data.children.length - 1]);
-          childrenEl.appendChild(childNode);
-          contentEl.style.display = 'block'; toggle.textContent = '▼'; save();
+          data.children.push({ title: t || '', short: '', content: '', children: [] });
+          save();
+          render();
         }
       });
 
       // edit
-      clone.querySelector('[data-action="edit"]').addEventListener('click', () => {
-        const newTitle = prompt('Edit title', data.title) || data.title;
-        const newShort = prompt('Short note (shown next to title)', data.short || '') || data.short;
-        const newContent = prompt('Content (HTML allowed)', data.content || '') || data.content;
-        data.title = newTitle; data.short = newShort; data.content = newContent;
-        titleEl.textContent = data.title; shortEl.textContent = data.short ? ` — ${data.short}` : '';
-        contentEl.innerHTML = data.content;
+      nodeEl.querySelector('[data-action="edit"]').addEventListener('click', () => {
+        const newTitle = prompt('Edit title', data.title) ?? data.title;
+        const newShort = prompt('Short note (shown next to title)', data.short ?? '') ?? data.short;
+        const newContent = prompt('Content (HTML allowed)', data.content ?? '') ?? data.content;
+        data.title = newTitle;
+        data.short = newShort;
+        data.content = newContent;
         save();
+        render();
       });
 
       // delete
-      clone.querySelector('[data-action="delete"]').addEventListener('click', () => {
+      nodeEl.querySelector('[data-action="delete"]').addEventListener('click', () => {
         if (!confirm('Delete this branch and all its children?')) return;
-        const parentList = nodeWrapper.parentElement;
-        if (parentList && parentList.dataset.role === 'children') {
-          const parentNode = findParentNode(treeData, data);
-          if (parentNode) {
-            parentNode.children = parentNode.children.filter(c => c !== data);
-            parentList.removeChild(nodeWrapper);
-            save();
-          }
+        const parentNode = findParentNode(treeData, data);
+        if (parentNode) {
+          parentNode.children = parentNode.children.filter(c => c !== data);
         } else {
+          // top-level
           treeData.children = treeData.children.filter(c => c !== data);
-          nodeWrapper.remove();
-          save();
         }
+        save();
+        render();
       });
 
       // render children
       (data.children || []).forEach(ch => {
-        const cn = buildNode(ch);
-        childrenEl.appendChild(cn);
+        childrenEl.appendChild(buildNode(ch));
       });
 
-      return nodeWrapper;
+      return nodeEl;
     }
 
     function findParentNode(root, target) {
@@ -259,9 +256,9 @@
 
     // Add root-level branch
     document.getElementById('addRoot').addEventListener('click', () => {
-      const t = prompt('New branch title', '▮');
+      const t = prompt('New branch title', '');
       if (t !== null) {
-        const node = { title: t || '▮', short: '', content: '▮', children: [] };
+        const node = { title: t || '', short: '', content: '', children: [] };
         treeData.children.push(node);
         render();
       }
@@ -270,7 +267,9 @@
     // reset
     document.getElementById('resetBtn').addEventListener('click', () => {
       if (confirm('Restore neutral placeholder tree and clear your local edits?')) {
-        treeData = defaultTree; save(); render();
+        treeData = JSON.parse(JSON.stringify(defaultTree));
+        save();
+        render();
       }
     });
 

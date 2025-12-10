@@ -1,11 +1,333 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>About Me</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Amrit Raj — Personal Tree</title>
+  <style>
+    :root{--bg:#f8fafc;--card:#ffffff;--muted:#6b7280;--accent:#0ea5a4;--line:#e6edf0}
+    html,body{height:100%}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0;background:linear-gradient(180deg, #fbfeff 0%, var(--bg) 100%);color:#0f172a}
+    .wrap{max-width:980px;margin:36px auto;padding:28px}
+    header{display:flex;align-items:center;gap:18px}
+    .avatar{width:84px;height:84px;border-radius:14px;background:linear-gradient(135deg,#dbeefd,#f3e8ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:#111}
+    h1{font-size:28px;margin:0}
+    .subtitle{color:var(--muted);margin-top:6px}
+
+    .card{background:var(--card);border-radius:14px;padding:18px;margin-top:18px;box-shadow:0 6px 18px rgba(12,18,31,0.04);border:1px solid var(--line)}
+
+    /* Tree styles */
+    .tree{padding:14px}
+    .node{list-style:none;margin:6px 0;padding-left:18px;position:relative}
+    .node:before{content:'';position:absolute;left:0;top:12px;height:calc(100% - 12px);width:12px;border-left:2px dashed var(--line)}
+    .node .branch{display:flex;align-items:center;gap:10px}
+    .toggle{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;background:#fff}
+    .label{font-weight:600}
+    .muted{color:var(--muted);font-size:13px}
+
+    .content{margin:10px 0 12px 36px;padding:12px;border-radius:8px;background:linear-gradient(90deg,#fbfffd, #ffffff);border:1px solid var(--line)}
+
+    .controls{display:flex;gap:8px;margin-top:10px}
+    button.btn{background:var(--accent);border:none;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
+    button.ghost{background:#fff;border:1px solid var(--line);color:#111}
+
+    .tiny{font-size:13px;color:var(--muted)}
+
+    footer{margin-top:16px;color:var(--muted);font-size:13px}
+
+    /* responsive */
+    @media (max-width:640px){.wrap{margin:10px;padding:14px}.avatar{width:64px;height:64px}}
+  </style>
 </head>
-  <body>
-    <h1>About Amrit Raj</h1>
-    <p>This is a brief description about mr.</p>
-    <a href="/">Back to Home</a>
-  </body>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="avatar">AR</div>
+      <div>
+        <h1>Amrit Raj</h1>
+        <div class="subtitle">A friendly personal page — not a CV. BSc (Hons) Mathematics (Ramanujan College, DU). Also exploring BS Data Science at IIT Madras — curious about computers & tech.</div>
+      </div>
+    </header>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <strong>Personal Tree</strong>
+          <div class="tiny">Click each branch to expand. You can add new branches or edit content — saved to your browser.</div>
+        </div>
+        <div class="controls">
+          <button class="btn" id="addRoot">+ Add Branch</button>
+          <button class="ghost" id="resetBtn">Reset</button>
+        </div>
+      </div>
+
+      <div class="tree card" id="treeRoot" style="margin-top:12px">
+        <!-- Tree will be rendered here -->
+      </div>
+
+      <div class="tiny" style="margin-top:10px">Tip: Use the "Add Branch" button to add a new topic. Click the gear icon on any branch to edit its title or description.</div>
+    </div>
+
+    <div class="card">
+      <strong>Quick links</strong>
+      <div style="margin-top:10px" class="muted">Local site editor: changes you make here are stored in your own browser (localStorage). To make changes permanent across devices, copy the HTML file into your GitHub Pages repo (index.html).</div>
+    </div>
+
+    <footer>Made with ♥ — edit freely. Want me to deploy this to GitHub Pages for you? Tell me and I will give step-by-step commands.</footer>
+  </div>
+
+  <template id="nodeTpl">
+    <div class="node">
+      <div class="branch">
+        <div class="toggle" data-action="toggle">▶</div>
+        <div style="flex:1">
+          <div><span class="label" data-role="title">Branch</span> <span class="muted" data-role="short"></span></div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="ghost" data-action="add">+ sub</button>
+          <button class="ghost" data-action="edit">✎</button>
+          <button class="ghost" data-action="delete">🗑</button>
+        </div>
+      </div>
+      <div class="content" data-role="content" style="display:none"></div>
+      <ul data-role="children"></ul>
+    </div>
+  </template>
+
+  <script>
+    // initial data (filled using the details you provided)
+    const defaultTree = {
+      title: 'root',
+      children: [
+        {
+          title: 'About Me',
+          short: 'A friendly intro — not a CV',
+          content: `Hi! I'm <strong>Amrit Raj</strong>. I study BSc (Hons) Mathematics at Ramanujan College (DU) and I'm also exploring BS in Data Science at IIT Madras out of interest in computers & tech. This site is casual — like how I'd introduce myself to a friend.`,
+          children: []
+        },
+        {
+          title: 'Education',
+          short: 'What I study',
+          content: `BSc (Hons) Mathematics — Ramanujan College, DU.<br/>Currently exploring BS in Data Science at IIT Madras and learning programming (diploma-level work).`,
+          children: []
+        },
+        {
+          title: 'Interests',
+          short: 'What I enjoy — full details',
+          content: `Below are expanded sub-branches describing each interest in depth. Click any sub-branch for details and personal notes.`,
+          children: [
+            {
+              title: 'Mathematics',
+              short: 'Problem solving & core ideas',
+              content: `I genuinely enjoy mathematics — especially when solving deep, core problems. I like the feeling of understanding a concept from first principles rather than rote tricks. I prefer the challenge and clarity that come from a careful proof or a neat trick that connects ideas. I'm not chasing being a "professional" mathematician — I enjoy math because it fits how my mind likes to think: precise, logical, and elegant.`,
+              children: []
+            },
+            {
+              title: 'Linux',
+              short: 'Why I prefer Linux',
+              content: `I prefer Linux over Windows because it gives me control and clarity. I like customizing the system, using the terminal, and building lightweight setups. Linux aligns with my interest in troubleshooting and automation — I can inspect what's happening under the hood, script tasks, and learn by doing.`,
+              children: []
+            },
+            {
+              title: 'Chess',
+              short: 'Late start — intense interest',
+              content: `I only learned chess in mid-2024 and now regret not starting earlier. The game is fascinating because it combines calculation, pattern recognition, and long-term planning. Right now I'm studying openings, tactics, and endgames; I record my progress and reflect on mistakes. My goal isn't just to get a high rating quickly — I want to enjoy the learning process and improve steadily.`,
+              children: [
+                {
+                  title: 'Why I started late',
+                  short: '',
+                  content: `I didn't discover chess earlier because my focus was elsewhere — studies, other hobbies, and life distractions. Once I tried it, I realized how addictive learning it could be. Better late than never: many skills transfer (analytical thinking, patience), and I'm excited about future progress.`,
+                  children: []
+                },
+                {
+                  title: 'Current study plan',
+                  short: '',
+                  content: `Daily tactics practice, one opening to learn at a time, annotated game reviews, and endgame fundamentals. Make small goals: 20 tactics a day, one annotated game per week.`,
+                  children: []
+                }
+              ]
+            },
+            {
+              title: 'Movies',
+              short: 'Why old movies & favorites',
+              content: `I enjoy older films (approx 2000–2016) across romance (SRK), action (Hrithik), and comedy (Akshay). These films have strong nostalgia, memorable music, and clear emotional beats that I enjoy. Recently I've watched many of the classics, so I don't have many new titles left to explore in that era — which explains why I'm not watching as many movies now.`,
+              children: [
+                {
+                  title: 'Why fewer new movies now',
+                  short: '',
+                  content: `In the last two years I went through many of the films I loved; I rewatched and completed most of them, so there's less novelty now. When I'm in the mood I still revisit favorites for comfort and nostalgia.`,
+                  children: []
+                }
+              ]
+            },
+            {
+              title: 'Automation & Scripting',
+              short: 'Tasker, scripts, small tools',
+              content: `I enjoy building automation: using Tasker for phone automation, writing Python scripts to solve repetitive tasks, and making tools that save small chunks of time. Automation scratches the same itch as math: find an elegant routine that reduces friction.`,
+              children: []
+            },
+            {
+              title: 'Gaming (future)',
+              short: 'Dream setup & current reality',
+              content: `I hope to dive into PC gaming once I have a GPU and a more powerful rig. Right now I don't play much — phone games aren't my preference, except for a few classics (Mini Militia, Clash of Clans). My ideal future setup is large and immersive (multimonitor, high fps), but for now gaming remains a planned hobby rather than a present one.`,
+              children: []
+            }
+          ]
+        },
+        {
+          title: 'Personality & Notes',
+          short: 'Shy, reflective, selective with photos',
+          content: `I'm naturally shy sometimes — that's part of who I am. I reflect on interactions and prefer small circles. I also care strongly about presentation: I don't like average photos. Out of ~4000 photos, fewer than 70 are usable, fewer than 15 are single portraits, and only about 5 I consider good. I prefer either very good (carefully chosen) or intentionally funny photos rather than bland, average ones.`,
+          children: []
+        },
+        {
+          title: 'Photos & Avatars',
+          short: 'Why few photos & what to do',
+          content: `You mentioned you don't like average photos. That's normal — some people are picky about self-images. Practical tips: take a short session with consistent lighting, pick 5-10 final shots at different expressions, and keep them in a folder. If you prefer not to use real photos, consider a simple illustrated avatar or stylized initials (the site already uses "AR" avatar).`,
+          children: [
+            {
+              title: 'Quick photo plan',
+              short: '',
+              content: `1) Choose a neutral background and natural light. 2) Take a set of 20 photos with different expressions. 3) Pick 3 favorites; edit lightly (crop, exposure). 4) Keep one as your profile picture and archive the rest.`,
+              children: []
+            }
+          ]
+        },
+        {
+          title: 'Projects (placeholder)',
+          short: 'Add projects here',
+          content: `You can list small projects: Python scripts, automation tasks, data analysis notebooks, chess study logs, etc. Add them using the "+ sub" button.`,
+          children: []
+        }
+      ]
+    };
+
+
+    // Load from localStorage or fallback
+    const STORAGE_KEY = 'amritraj_tree_v1';
+    let treeData = null;
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      treeData = raw ? JSON.parse(raw) : defaultTree;
+    }catch(e){treeData = defaultTree}
+
+    const rootEl = document.getElementById('treeRoot');
+    const tpl = document.getElementById('nodeTpl').content;
+
+    function render() {
+      rootEl.innerHTML = '';
+      treeData.children.forEach(child => {
+        const node = buildNode(child);
+        rootEl.appendChild(node);
+      })
+      save();
+    }
+
+    function buildNode(data) {
+      const clone = tpl.cloneNode(true);
+      const nodeWrapper = clone.querySelector('.node');
+      const titleEl = clone.querySelector('[data-role="title"]');
+      const shortEl = clone.querySelector('[data-role="short"]');
+      const contentEl = clone.querySelector('[data-role="content"]');
+      const childrenEl = clone.querySelector('[data-role="children"]');
+
+      titleEl.innerHTML = data.title || 'Untitled';
+      shortEl.textContent = data.short ? ` — ${data.short}` : '';
+      contentEl.innerHTML = data.content || '<span class="muted">No details yet.</span>';
+
+      // toggle
+      const toggle = clone.querySelector('[data-action="toggle"]');
+      toggle.addEventListener('click', ()=>{
+        const open = contentEl.style.display === 'block';
+        contentEl.style.display = open ? 'none' : 'block';
+        toggle.textContent = open ? '▶' : '▼';
+      });
+
+      // add sub-branch
+      clone.querySelector('[data-action="add"]').addEventListener('click', ()=>{
+        const t = prompt('New sub-branch title');
+        if(t){
+          data.children = data.children || [];
+          data.children.push({title:t, short:'', content:'Write something here...', children:[]});
+          const childNode = buildNode(data.children[data.children.length-1]);
+          childrenEl.appendChild(childNode);
+          contentEl.style.display = 'block'; toggle.textContent = '▼'; save();
+        }
+      });
+
+      // edit
+      clone.querySelector('[data-action="edit"]').addEventListener('click', ()=>{
+        const newTitle = prompt('Edit title', data.title) || data.title;
+        const newShort = prompt('Short note (shown next to title)', data.short || '') || data.short;
+        const newContent = prompt('Content HTML (basic tags ok)', data.content || '') || data.content;
+        data.title = newTitle; data.short = newShort; data.content = newContent;
+        titleEl.innerHTML = data.title; shortEl.textContent = data.short ? ` — ${data.short}` : '';
+        contentEl.innerHTML = data.content;
+        save();
+      });
+
+      // delete
+      clone.querySelector('[data-action="delete"]').addEventListener('click', ()=>{
+        if(!confirm('Delete this branch and all its children?')) return;
+        const parentList = nodeWrapper.parentElement;
+        if(parentList && parentList.dataset.role === 'children'){
+          // remove from parent's children array
+          const parentNode = findParentNode(treeData, data);
+          if(parentNode){
+            parentNode.children = parentNode.children.filter(c=>c!==data);
+            parentList.removeChild(nodeWrapper);
+            save();
+          }
+        } else {
+          // root-level delete
+          treeData.children = treeData.children.filter(c=>c!==data);
+          nodeWrapper.remove();
+          save();
+        }
+      });
+
+      // render children
+      (data.children || []).forEach(ch => {
+        const cn = buildNode(ch);
+        childrenEl.appendChild(cn);
+      });
+
+      return nodeWrapper;
+    }
+
+    function findParentNode(root, target){
+      if(!root || !root.children) return null;
+      for(const ch of root.children){
+        if(ch === target) return root;
+        const deeper = findParentNode(ch, target);
+        if(deeper) return deeper;
+      }
+      return null;
+    }
+
+    function save(){
+      try{localStorage.setItem(STORAGE_KEY, JSON.stringify(treeData));}catch(e){console.warn('save failed',e)}
+    }
+
+    // Add root-level branch
+    document.getElementById('addRoot').addEventListener('click', ()=>{
+      const t = prompt('New branch title');
+      if(t){
+        const node = {title:t, short:'', content:'Write something here...', children:[]};
+        treeData.children.push(node);
+        render();
+      }
+    });
+
+    // reset
+    document.getElementById('resetBtn').addEventListener('click', ()=>{
+      if(confirm('Restore initial tree and clear your local edits?')){
+        treeData = defaultTree; save(); render();
+      }
+    });
+
+    // initial render
+    render();
+  </script>
+</body>
 </html>

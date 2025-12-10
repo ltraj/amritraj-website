@@ -27,15 +27,15 @@
 
     .content{margin:10px 0 12px 36px;padding:12px;border-radius:8px;background:linear-gradient(90deg,#fbfffd, #ffffff);border:1px solid var(--line)}
 
+    /* controls/buttons (re-added) */
     .controls{display:flex;gap:8px;margin-top:10px}
     button.btn{background:var(--accent);border:none;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
-    button.ghost{background:#fff;border:1px solid var(--line);color:#111}
+    button.ghost{background:#fff;border:1px solid var(--line);color:#111;padding:7px 10px;border-radius:8px;cursor:pointer}
 
     .tiny{font-size:13px;color:var(--muted)}
 
     footer{margin-top:16px;color:var(--muted);font-size:13px}
 
-    /* responsive */
     @media (max-width:640px){.wrap{margin:10px;padding:14px}.avatar{width:64px;height:64px}}
   </style>
 </head>
@@ -95,7 +95,7 @@
   </template>
 
   <script>
-    // initial data (filled using the details you provided)
+    // initial data (kept exactly as you wrote)
     const defaultTree = {
       title: 'root',
       children: [
@@ -202,14 +202,13 @@
       ]
     };
 
-
     // Load from localStorage or fallback
     const STORAGE_KEY = 'amritraj_tree_v1';
     let treeData = null;
-    try{
+    try {
       const raw = localStorage.getItem(STORAGE_KEY);
       treeData = raw ? JSON.parse(raw) : defaultTree;
-    }catch(e){treeData = defaultTree}
+    } catch (e) { treeData = defaultTree; }
 
     const rootEl = document.getElementById('treeRoot');
     const tpl = document.getElementById('nodeTpl').content;
@@ -219,7 +218,7 @@
       treeData.children.forEach(child => {
         const node = buildNode(child);
         rootEl.appendChild(node);
-      })
+      });
       save();
     }
 
@@ -237,26 +236,26 @@
 
       // toggle
       const toggle = clone.querySelector('[data-action="toggle"]');
-      toggle.addEventListener('click', ()=>{
+      toggle.addEventListener('click', () => {
         const open = contentEl.style.display === 'block';
         contentEl.style.display = open ? 'none' : 'block';
         toggle.textContent = open ? '▶' : '▼';
       });
 
       // add sub-branch
-      clone.querySelector('[data-action="add"]').addEventListener('click', ()=>{
+      clone.querySelector('[data-action="add"]').addEventListener('click', () => {
         const t = prompt('New sub-branch title');
-        if(t){
+        if (t) {
           data.children = data.children || [];
-          data.children.push({title:t, short:'', content:'Write something here...', children:[]});
-          const childNode = buildNode(data.children[data.children.length-1]);
+          data.children.push({ title: t, short: '', content: 'Write something here...', children: [] });
+          const childNode = buildNode(data.children[data.children.length - 1]);
           childrenEl.appendChild(childNode);
           contentEl.style.display = 'block'; toggle.textContent = '▼'; save();
         }
       });
 
       // edit
-      clone.querySelector('[data-action="edit"]').addEventListener('click', ()=>{
+      clone.querySelector('[data-action="edit"]').addEventListener('click', () => {
         const newTitle = prompt('Edit title', data.title) || data.title;
         const newShort = prompt('Short note (shown next to title)', data.short || '') || data.short;
         const newContent = prompt('Content HTML (basic tags ok)', data.content || '') || data.content;
@@ -267,20 +266,18 @@
       });
 
       // delete
-      clone.querySelector('[data-action="delete"]').addEventListener('click', ()=>{
-        if(!confirm('Delete this branch and all its children?')) return;
+      clone.querySelector('[data-action="delete"]').addEventListener('click', () => {
+        if (!confirm('Delete this branch and all its children?')) return;
         const parentList = nodeWrapper.parentElement;
-        if(parentList && parentList.dataset.role === 'children'){
-          // remove from parent's children array
+        if (parentList && parentList.dataset.role === 'children') {
           const parentNode = findParentNode(treeData, data);
-          if(parentNode){
-            parentNode.children = parentNode.children.filter(c=>c!==data);
+          if (parentNode) {
+            parentNode.children = parentNode.children.filter(c => c !== data);
             parentList.removeChild(nodeWrapper);
             save();
           }
         } else {
-          // root-level delete
-          treeData.children = treeData.children.filter(c=>c!==data);
+          treeData.children = treeData.children.filter(c => c !== data);
           nodeWrapper.remove();
           save();
         }
@@ -295,33 +292,33 @@
       return nodeWrapper;
     }
 
-    function findParentNode(root, target){
-      if(!root || !root.children) return null;
-      for(const ch of root.children){
-        if(ch === target) return root;
+    function findParentNode(root, target) {
+      if (!root || !root.children) return null;
+      for (const ch of root.children) {
+        if (ch === target) return root;
         const deeper = findParentNode(ch, target);
-        if(deeper) return deeper;
+        if (deeper) return deeper;
       }
       return null;
     }
 
-    function save(){
-      try{localStorage.setItem(STORAGE_KEY, JSON.stringify(treeData));}catch(e){console.warn('save failed',e)}
+    function save() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(treeData)); } catch (e) { console.warn('save failed', e); }
     }
 
     // Add root-level branch
-    document.getElementById('addRoot').addEventListener('click', ()=>{
+    document.getElementById('addRoot').addEventListener('click', () => {
       const t = prompt('New branch title');
-      if(t){
-        const node = {title:t, short:'', content:'Write something here...', children:[]};
+      if (t) {
+        const node = { title: t, short: '', content: 'Write something here...', children: [] };
         treeData.children.push(node);
         render();
       }
     });
 
     // reset
-    document.getElementById('resetBtn').addEventListener('click', ()=>{
-      if(confirm('Restore initial tree and clear your local edits?')){
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (confirm('Restore initial tree and clear your local edits?')) {
         treeData = defaultTree; save(); render();
       }
     });

@@ -1,280 +1,379 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- Basic browser setup -->
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Personal Tree — Amrit Raj</title>
-  <style>
-    :root{--bg:#f8fafc;--card:#ffffff;--muted:#6b7280;--accent:#0ea5a4;--line:#e6edf0}
-    html,body{height:100%}
-    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0;background:linear-gradient(180deg, #fbfeff 0%, var(--bg) 100%);color:#0f172a}
-    .wrap{max-width:980px;margin:36px auto;padding:28px}
-    header{display:flex;align-items:center;gap:18px}
-    .avatar{width:84px;height:84px;border-radius:14px;background:linear-gradient(135deg,#dbeefd,#f3e8ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:#111}
-    h1{font-size:28px;margin:0}
-    .subtitle{color:var(--muted);margin-top:6px}
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    .card{background:var(--card);border-radius:14px;padding:18px;margin-top:18px;box-shadow:0 6px 18px rgba(12,18,31,0.04);border:1px solid var(--line)}
+  <!--
+    EDIT THIS TITLE:
+    This is what appears in the browser tab and Google search previews.
+  -->
+  <title>Amrit Raj | Developer Portfolio</title>
 
-    /* Tree styles */
-    .tree{padding:14px}
-    .node{list-style:none;margin:6px 0;padding-left:22px;position:relative}
-    .node:before{content:'';position:absolute;left:6px;top:14px;height:calc(100% - 14px);width:12px;border-left:2px dashed var(--line)}
-    .node > .branch{display:flex;align-items:center;gap:10px}
-    .toggle{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;background:#fff}
-    .label{font-weight:600}
-    .muted{color:var(--muted);font-size:13px}
+  <!-- Google Font: change the family here if you want a different look. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    .content{margin:10px 0 12px 36px;padding:12px;border-radius:8px;background:linear-gradient(90deg,#fbfffd,#ffffff);border:1px solid var(--line)}
-
-    /* controls/buttons (re-added) */
-    .controls{display:flex;gap:8px;margin-top:10px}
-    button.btn{background:var(--accent);border:none;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
-    button.ghost{background:#fff;border:1px solid var(--line);color:#111;padding:7px 10px;border-radius:8px;cursor:pointer}
-
-    .tiny{font-size:13px;color:var(--muted)}
-
-    footer{margin-top:16px;color:var(--muted);font-size:13px}
-
-    @media (max-width:640px){.wrap{margin:10px;padding:14px}.avatar{width:64px;height:64px}}
-  </style>
+  <!-- Main stylesheet for the full website. -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="avatar">AR</div>
-      <div>
-        <h1>Amrit Raj</h1>
-        <div class="subtitle">A personal page — not a CV. BSc (Hons) Mathematics (Ramanujan College, DU). Also exploring BS Data Science at IIT Madras — curious about computers & tech.</div>
+  <!-- This link appears when keyboard users press Tab. -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!--
+    Fixed navbar:
+    EDIT THE LINKS if you add/remove sections below.
+  -->
+  <header class="site-header" id="siteHeader">
+    <nav class="navbar container" aria-label="Primary navigation">
+      <!-- EDIT THIS TEXT TO CHANGE YOUR LOGO/INITIALS -->
+      <a class="brand" href="#hero" aria-label="Go to home">
+        <span class="brand-mark">AR</span>
+        <span class="brand-name">Amrit Raj</span>
+      </a>
+
+      <!-- Hamburger button for mobile screens. JavaScript opens/closes the menu. -->
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#tree">Tree</a>
+        <a href="#contact">Contact</a>
       </div>
-    </header>
+    </nav>
+  </header>
 
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <strong>Personal Tree</strong>
-          <div class="tiny">Click a branch to expand. Use the buttons to add, edit, or remove nodes. Data is saved locally in your browser.</div>
+  <main id="main">
+    <!--
+      HERO SECTION:
+      EDIT THIS SECTION to change your headline, tagline, and buttons.
+    -->
+    <section class="hero section" id="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">Mathematics &bull; Data Science &bull; Web Development</p>
+
+          <!-- EDIT THIS TEXT TO CHANGE YOUR NAME -->
+          <h1>Hi, I am Amrit Raj.</h1>
+
+          <!-- EDIT THIS TAGLINE to match your current goals. -->
+          <p class="hero-text">
+            I build clean digital experiences, explore data and automation, and keep a personal tree of ideas that grows with me.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">View Projects</a>
+            <a class="btn btn-secondary" href="#tree">Explore My Tree</a>
+          </div>
         </div>
-        <div class="controls">
-          <button class="btn" id="addRoot">+ Add Branch</button>
-          <button class="ghost" id="resetBtn">Reset</button>
+
+        <!-- Visual hero block: replace the initials/photo area later if you have a real profile image. -->
+        <div class="hero-visual reveal" aria-label="Portfolio visual">
+          <div class="profile-card">
+            <!-- EDIT THIS TEXT TO CHANGE INITIALS -->
+            <div class="profile-avatar">AR</div>
+            <div class="profile-lines">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="tech-pill pill-one">Python</div>
+            <div class="tech-pill pill-two">Linux</div>
+            <div class="tech-pill pill-three">Math</div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <!-- use a UL as the root container so nested lists are consistent -->
-      <ul class="tree card" id="treeRoot" style="margin-top:12px; padding:12px 16px;">
-        <!-- Tree will be rendered here -->
-      </ul>
+    <!--
+      ABOUT SECTION:
+      EDIT THIS TEXT to make the introduction more personal.
+    -->
+    <section class="section" id="about">
+      <div class="container split-section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">About</p>
+          <h2>A curious builder with a math-first mind.</h2>
+        </div>
 
-      <div class="tiny" style="margin-top:10px">Tip: Use the Add button to create a new top-level topic. Edit content to replace all placeholder symbols (▮, •••).</div>
+        <div class="about-content reveal">
+          <p>
+            I am studying BSc (Hons) Mathematics at Ramanujan College, University of Delhi, and I am also exploring Data Science through IIT Madras. I enjoy understanding how things work, especially when mathematics, computers, and practical tools meet.
+          </p>
+          <p>
+            This portfolio is designed to grow with me: projects, skills, notes, interests, and the personal tree below can all be edited as I learn more.
+          </p>
+
+          <!-- EDIT THESE QUICK FACTS -->
+          <div class="quick-facts">
+            <div>
+              <span>Focus</span>
+              <strong>Web, Data, Automation</strong>
+            </div>
+            <div>
+              <span>Currently Learning</span>
+              <strong>JavaScript + Python</strong>
+            </div>
+            <div>
+              <span>Style</span>
+              <strong>Clean, useful, thoughtful</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--
+      SKILLS SECTION:
+      EDIT percentages and labels in these skill cards.
+    -->
+    <section class="section alt-section" id="skills">
+      <div class="container">
+        <div class="section-heading centered reveal">
+          <p class="eyebrow">Skills</p>
+          <h2>Tools I am building with.</h2>
+          <p>Simple skill cards you can update as you improve.</p>
+        </div>
+
+        <div class="skills-grid">
+          <!-- EDIT THIS SKILL CARD -->
+          <article class="skill-card reveal">
+            <div class="skill-top">
+              <h3>HTML & CSS</h3>
+              <span>85%</span>
+            </div>
+            <div class="progress" aria-label="HTML and CSS skill level">
+              <span style="width: 85%"></span>
+            </div>
+            <p>Responsive layouts, clean structure, and modern styling.</p>
+          </article>
+
+          <!-- EDIT THIS SKILL CARD -->
+          <article class="skill-card reveal">
+            <div class="skill-top">
+              <h3>JavaScript</h3>
+              <span>70%</span>
+            </div>
+            <div class="progress" aria-label="JavaScript skill level">
+              <span style="width: 70%"></span>
+            </div>
+            <p>Interactive UI, browser logic, and small useful tools.</p>
+          </article>
+
+          <!-- EDIT THIS SKILL CARD -->
+          <article class="skill-card reveal">
+            <div class="skill-top">
+              <h3>Python</h3>
+              <span>75%</span>
+            </div>
+            <div class="progress" aria-label="Python skill level">
+              <span style="width: 75%"></span>
+            </div>
+            <p>Scripting, automation, data handling, and problem solving.</p>
+          </article>
+
+          <!-- EDIT THIS SKILL CARD -->
+          <article class="skill-card reveal">
+            <div class="skill-top">
+              <h3>Linux</h3>
+              <span>80%</span>
+            </div>
+            <div class="progress" aria-label="Linux skill level">
+              <span style="width: 80%"></span>
+            </div>
+            <p>Terminal workflows, customization, and system curiosity.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!--
+      PROJECTS SECTION:
+      Copy one project card and paste it again to add more projects later.
+    -->
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-heading centered reveal">
+          <p class="eyebrow">Projects</p>
+          <h2>Selected work and ideas.</h2>
+          <p>Use these cards as placeholders until you add real projects.</p>
+        </div>
+
+        <div class="projects-grid">
+          <!-- ADD YOUR PROJECT HERE -->
+          <article class="project-card reveal">
+            <div class="project-media media-one"></div>
+            <div class="project-body">
+              <div class="project-tags">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JS</span>
+              </div>
+              <h3>Personal Portfolio</h3>
+              <p>A modern portfolio with a unique personal tree section, smooth navigation, and responsive design.</p>
+              <!-- EDIT THIS LINK when you have a live project URL. -->
+              <a href="#tree">View highlight</a>
+            </div>
+          </article>
+
+          <!-- ADD YOUR PROJECT HERE -->
+          <article class="project-card reveal">
+            <div class="project-media media-two"></div>
+            <div class="project-body">
+              <div class="project-tags">
+                <span>Python</span>
+                <span>Automation</span>
+              </div>
+              <h3>Automation Scripts</h3>
+              <p>Small scripts and workflows that reduce repetitive work and make daily tasks faster.</p>
+              <!-- Replace # with your GitHub/project link. -->
+              <a href="#contact">Coming soon</a>
+            </div>
+          </article>
+
+          <!-- ADD YOUR PROJECT HERE -->
+          <article class="project-card reveal">
+            <div class="project-media media-three"></div>
+            <div class="project-body">
+              <div class="project-tags">
+                <span>Data</span>
+                <span>Math</span>
+              </div>
+              <h3>Data Science Notes</h3>
+              <p>A future space for notebooks, math explanations, and visual explorations of data.</p>
+              <!-- Replace # with your GitHub/project link. -->
+              <a href="#contact">Coming soon</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!--
+      PERSONAL TREE SECTION:
+      This keeps your original idea and makes it the unique highlight of the portfolio.
+      The tree content is created in script.js so it can be edited, added, deleted, and saved.
+    -->
+    <section class="section alt-section" id="tree">
+      <div class="container">
+        <div class="tree-shell reveal">
+          <div class="tree-header">
+            <div>
+              <p class="eyebrow">Personal Tree</p>
+              <h2>My thoughts, interests, and learning branches.</h2>
+              <p>
+                Click any branch to expand it. Add, edit, or remove branches and your changes are saved in this browser.
+              </p>
+            </div>
+
+            <!-- Tree controls are connected in script.js. -->
+            <div class="tree-controls" aria-label="Tree controls">
+              <button class="btn btn-primary" id="addRoot" type="button">Add Branch</button>
+              <button class="btn btn-secondary" id="expandAll" type="button">Expand All</button>
+              <button class="btn btn-secondary" id="collapseAll" type="button">Collapse All</button>
+              <button class="btn btn-danger" id="resetBtn" type="button">Reset</button>
+            </div>
+          </div>
+
+          <!-- JavaScript renders the tree branches inside this list. -->
+          <ul class="tree-list" id="treeRoot" aria-label="Personal tree"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!--
+      CONTACT SECTION:
+      EDIT email, GitHub, LinkedIn, and social links here.
+    -->
+    <section class="section" id="contact">
+      <div class="container contact-grid">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Contact</p>
+          <h2>Let us build something useful.</h2>
+          <p>
+            This form opens your email app. Replace the email address in script.js with your real email.
+          </p>
+
+          <div class="contact-links">
+            <!-- EDIT THESE LINKS -->
+            <a href="mailto:your.email@example.com">your.email@example.com</a>
+            <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+          </div>
+        </div>
+
+        <!-- Simple form: JavaScript turns this into a mailto email. -->
+        <form class="contact-form reveal" id="contactForm">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Your name" required />
+
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="your@email.com" required />
+
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="Write your message" required></textarea>
+
+          <button class="btn btn-primary" type="submit">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!--
+    FOOTER:
+    EDIT the name/year if needed.
+  -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 Amrit Raj. Built with HTML, CSS, and JavaScript.</p>
+      <a href="#hero">Back to top</a>
     </div>
+  </footer>
 
-    <div class="card">
-      <strong>Quick notes</strong>
-      <div style="margin-top:10px" class="muted">This version contains only neutral placeholders so you can type your own personal text. To keep your site across devices, copy this file into a GitHub Pages repo (index.html).</div>
-    </div>
-
-    <footer>Made with care — placeholders only. Ask me to deploy or tweak styles.</footer>
-  </div>
-
-  <!-- template uses an LI so children append naturally into ULs -->
+  <!--
+    Tree node template:
+    JavaScript clones this hidden structure for every branch.
+    You usually do not need to edit this unless you want different buttons/layout.
+  -->
   <template id="nodeTpl">
-    <li class="node">
-      <div class="branch">
-        <button class="toggle" data-action="toggle" aria-label="toggle">▶</button>
-        <div style="flex:1">
-          <div><span class="label" data-role="title">Branch</span><span class="muted" data-role="short"> •••</span></div>
-        </div>
-        <div style="display:flex;gap:6px">
-          <button class="ghost" data-action="add" aria-label="add-sub">+ sub</button>
-          <button class="ghost" data-action="edit" aria-label="edit">✎</button>
-          <button class="ghost" data-action="delete" aria-label="delete">🗑</button>
+    <li class="tree-node">
+      <div class="node-card">
+        <button class="node-toggle" data-action="toggle" type="button" aria-expanded="false">
+          <span class="toggle-icon">+</span>
+          <span class="node-text">
+            <strong data-role="title">Branch title</strong>
+            <small data-role="short"></small>
+          </span>
+        </button>
+
+        <div class="node-actions">
+          <button class="mini-btn" data-action="add" type="button">Sub</button>
+          <button class="mini-btn" data-action="edit" type="button">Edit</button>
+          <button class="mini-btn danger" data-action="delete" type="button">Delete</button>
         </div>
       </div>
-      <div class="content" data-role="content" style="display:none">▮</div>
-      <ul data-role="children" style="margin-left:12px;padding-left:12px"></ul>
+
+      <div class="node-panel">
+        <div class="node-panel-inner">
+          <div class="node-content" data-role="content"></div>
+          <ul class="children-list" data-role="children"></ul>
+        </div>
+      </div>
     </li>
   </template>
 
-  <script>
-    // neutral placeholder data
-    const defaultTree = {
-      title: 'root',
-      children: [
-        { title: 'About Me', short: 'A friendly intro — not a CV', content: 'Hi! I\'m <strong>Amrit Raj</strong>. I study BSc (Hons) Mathematics at Ramanujan College (DU) and I\'m also exploring BS in Data Science at IIT Madras out of interest in computers & tech. This site is casual — like how I\'d introduce myself to someone.', children: [] },
-        { title: 'Education', short: 'What I study', content: 'BSc (Hons) Mathematics — Ramanujan College, DU.<br/>Currently exploring BS in Data Science at IIT Madras and learning programming (diploma-level)', children: [] },
-        {
-          title: 'Interests', short: 'What I enjoy — full details', content: 'Below are expanded sub-branches describing each interest in depth. Click any sub-branch for details and personal notes.', children: [
-            { title: 'Mathematics', short: 'Problem solving & core ideas', content: 'I genuinely enjoy mathematics — especially when solving deep, core problems. I\'m not chasing being a "professional" mathematician — I enjoy math because it fits how my mind likes to think.', children: [] },
-            { title: 'Linux', short: 'Why I prefer Linux', content: 'I prefer Linux over Windows because it gives me control and clarity. I like customizing the system, using the terminal, and building lightweight setups. Linux aligns with my interest in troubleshooting and automation — I can inspect what\'s happening under the hood, script tasks, and learn by doing.', children: [] },
-            {
-              title: 'Chess',
-              short: 'Late start — intense interest',
-              content: `I learned chess in mid-2024 and now regret not starting earlier. The game is fascinating because it combines calculation, pattern recognition, and long-term planning. Right now I'm studying openings, tactics, and endgames.`,
-              children: [
-                {
-                  title: 'Why I started late',
-                  short: '',
-                  content: `I didn't discover chess earlier because my focus was elsewhere — other hobbies, and life distractions. Once I tried it, I realized how addictive learning it could be. I'm excited about future progress.`,
-                  children: []
-                }
-              ]
-            },
-            {
-              title: 'Movies',
-              short: 'Why old movies & favorites',
-              content: `I enjoy older films (approx 2000–2016) across romance (SRK), action (Hrithik), and comedy (Akshay). These films have strong nostalgia, memorable music, and clear emotional beats that I enjoy. Recently I've watched many of the classics, so I don't have many new titles left to explore in that era — which explains why I'm not watching as many movies now.`,
-              children: [
-                {
-                  title: 'Why fewer new movies now',
-                  short: '',
-                  content: `In the last two years I went through many of the films I loved; I rewatched and completed most of them, so there's less novelty now. When I'm in the mood I still revisit favorites for comfort and nostalgia.`,
-                  children: []
-                }
-              ]
-            },
-            {
-              title: 'Automation & Scripting',
-              short: 'Tasker, scripts, small tools',
-              content: `I enjoy building automation: using Tasker for phone automation, writing Python scripts to solve repetitive tasks, and making tools that save small chunks of time.`,
-              children: []
-            },
-            {
-              title: 'Gaming (future)',
-              short: 'Dream setup & current reality',
-              content: `I hope to dive into PC gaming once I have a GPU and a more powerful rig. Right now I don't play much — phone games aren't my preference, except for a few classics (Mini Militia, Clash of Clans). My ideal future setup is large and immersive (multimonitor, high fps), but for now gaming remains a planned hobby rather than a present one.`,
-              children: []
-            }
-          ]
-        },
-        {
-          title: 'Personality & Notes',
-          short: 'Shy, reflective, selective with photos',
-          content: `I’m naturally shy sometimes, and I don’t know why, but I don’t like being shy — that's part of who I am. I reflect on interactions and prefer small circles. I don't like average photos. Out of ~4000 photos, fewer than 70 are usable, fewer than 15 are single portraits, and only about 5 I consider good. I prefer either very good or intentionally funny photos rather than bland, average ones.`,
-          children: []
-        }
-      ]
-    };
-
-    const STORAGE_KEY = 'personal_tree_placeholders_v1';
-    let treeData = null;
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      treeData = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(defaultTree));
-    } catch (e) { treeData = JSON.parse(JSON.stringify(defaultTree)); }
-
-    const rootEl = document.getElementById('treeRoot');
-    const tpl = document.getElementById('nodeTpl').content;
-
-    function render() {
-      rootEl.innerHTML = '';
-      (treeData.children || []).forEach(child => {
-        const node = buildNode(child);
-        rootEl.appendChild(node);
-      });
-      save();
-    }
-
-    function buildNode(data) {
-      const fragment = tpl.cloneNode(true);
-      const nodeEl = fragment.querySelector('.node');
-      const titleEl = nodeEl.querySelector('[data-role="title"]');
-      const shortEl = nodeEl.querySelector('[data-role="short"]');
-      const contentEl = nodeEl.querySelector('[data-role="content"]');
-      const childrenEl = nodeEl.querySelector('[data-role="children"]');
-
-      titleEl.textContent = data.title || '';
-      shortEl.textContent = data.short ? ` — ${data.short}` : '';
-      contentEl.innerHTML = data.content || '<span class="muted">No details yet.</span>';
-
-      // toggle
-      const toggle = nodeEl.querySelector('[data-action="toggle"]');
-      toggle.addEventListener('click', () => {
-        const open = contentEl.style.display === 'block';
-        contentEl.style.display = open ? 'none' : 'block';
-        toggle.textContent = open ? '▶' : '▼';
-      });
-
-      // add sub-branch
-      nodeEl.querySelector('[data-action="add"]').addEventListener('click', () => {
-        const t = prompt('New sub-branch title', '');
-        if (t !== null) {
-          data.children = data.children || [];
-          data.children.push({ title: t || '', short: '', content: '', children: [] });
-          save();
-          render();
-        }
-      });
-
-      // edit
-      nodeEl.querySelector('[data-action="edit"]').addEventListener('click', () => {
-        const newTitle = prompt('Edit title', data.title) ?? data.title;
-        const newShort = prompt('Short note (shown next to title)', data.short ?? '') ?? data.short;
-        const newContent = prompt('Content (HTML allowed)', data.content ?? '') ?? data.content;
-        data.title = newTitle;
-        data.short = newShort;
-        data.content = newContent;
-        save();
-        render();
-      });
-
-      // delete
-      nodeEl.querySelector('[data-action="delete"]').addEventListener('click', () => {
-        if (!confirm('Delete this branch and all its children?')) return;
-        const parentNode = findParentNode(treeData, data);
-        if (parentNode) {
-          parentNode.children = parentNode.children.filter(c => c !== data);
-        } else {
-          // top-level
-          treeData.children = treeData.children.filter(c => c !== data);
-        }
-        save();
-        render();
-      });
-
-      // render children
-      (data.children || []).forEach(ch => {
-        childrenEl.appendChild(buildNode(ch));
-      });
-
-      return nodeEl;
-    }
-
-    function findParentNode(root, target) {
-      if (!root || !root.children) return null;
-      for (const ch of root.children) {
-        if (ch === target) return root;
-        const deeper = findParentNode(ch, target);
-        if (deeper) return deeper;
-      }
-      return null;
-    }
-
-    function save() {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(treeData)); } catch (e) { console.warn('save failed', e); }
-    }
-
-    // Add root-level branch
-    document.getElementById('addRoot').addEventListener('click', () => {
-      const t = prompt('New branch title', '');
-      if (t !== null) {
-        const node = { title: t || '', short: '', content: '', children: [] };
-        treeData.children.push(node);
-        render();
-      }
-    });
-
-    // reset
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      if (confirm('Restore neutral placeholder tree and clear your local edits?')) {
-        treeData = JSON.parse(JSON.stringify(defaultTree));
-        save();
-        render();
-      }
-    });
-
-    // initial render
-    render();
-  </script>
+  <!-- Main JavaScript for navigation, animation, contact form, and tree logic. -->
+  <script src="script.js"></script>
 </body>
 </html>
